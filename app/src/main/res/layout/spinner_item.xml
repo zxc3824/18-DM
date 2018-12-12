@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             xmlns:tools="http://schemas.android.com/tools"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="wrap_content"
+                                             android:background="@drawable/border_color">
+
+    <ImageView
+            android:layout_width="22dp"
+            android:layout_height="30dp"
+            app:srcCompat="@mipmap/ic_launcher"
+            android:id="@+id/iv_selectedIcon"
+            android:contentDescription="@string/icon"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="1dp"/>
+
+    <TextView
+            android:text="@string/textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_iconText"
+            app:layout_constraintStart_toEndOf="@+id/iv_selectedIcon"
+            android:textSize="15dp"
+            android:textColor="#000"
+            android:textStyle="bold"
+            android:layout_marginStart="8dp"
+            app:layout_constraintTop_toTopOf="@+id/iv_selectedIcon"
+            tools:ignore="SpUsage"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_selectedIcon"/>
+</android.support.constraint.ConstraintLayout>

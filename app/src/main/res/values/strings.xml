@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">KIntegratedTest</string>
+    <string name="tv_btn_date">2018.10 – 2018.10</string>
+    <string name="tv_text">Text</string>
+    <string name="weather">Weather</string>
+    <string name="feel">Feel</string>
+    <string name="tv_createdDate">CreatedDate</string>
+    <string name="content">Content</string>
+    <string name="et_text">내용을 입력하세요.</string>
+    <string name="modify">Modify</string>
+    <string name="icon">Icon</string>
+    <string name="textview">TextView</string>
+    <string name="dash">-</string>
+    <string name="tilde">~</string>
+    <string name="date">Date</string>
+</resources>
