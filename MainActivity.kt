@@ -88,9 +88,9 @@ class MainActivity : AppCompatActivity() {
         recyclerCursorAdapter.changeCursor(c, query)
     }
 
-    fun onClickDate(v : View) { dialogSetDate(false) }
+    fun onClickDate() { dialogSetDate(false) }
 
-    fun onClickChart(v : View) {
+    fun onClickChart() {
         if (!isDelete) dialogSetDate(true)
         else {
             if (!recyclerCursorAdapter.isAllChecked()) {
@@ -106,14 +106,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun onClickDelete(v : View) {
+    fun onClickDelete() {
         if (isDelete) {
             if (recyclerCursorAdapter.isNothingChecked()) { Toast.makeText(this, "하나 이상 체크해주세요.", Toast.LENGTH_SHORT).show() }
             else {
                 db = DBAdapter(this, DBAdapter.WRITABLE)
 
-                for (i in 0 until recyclerCursorAdapter.itemCount) {
-                    if (recyclerCursorAdapter.checkList[i]) {
+                recyclerCursorAdapter.checkList.forEachIndexed { i, it ->
+                    if (it) {
                         c.moveToPosition(i)
                         db.delete("memo", "_id=?", arrayOf(c.getString(0)))
                     }
@@ -133,12 +133,13 @@ class MainActivity : AppCompatActivity() {
         recyclerCursorAdapter.toggleVisibility(isDelete)
     }
 
-    fun onClickCreateMemo(v : View) {
+    fun onClickCreateMemo() {
         if (!isDelete) { // 메모 추가 버튼
-            val intent = Intent(this, EditActivity::class.java)
-            intent.putExtra("isCreate", true)
-            intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
-            startActivity(intent)
+            startActivity(Intent(this, EditActivity::class.java)
+                .apply {
+                    putExtra("isCreate", true)
+                    flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+                })
         }
         else { // 삭제 취소 버튼
             isDelete = false
@@ -153,32 +154,35 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun dialogSetDate(isChart : Boolean) {
-        val inflater = layoutInflater
+        val dialogView = layoutInflater.inflate(dialog_date, null as ViewGroup?)
 
-        val dialogView = inflater.inflate(dialog_date, null as ViewGroup?)
-
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("기간 설정")
-        builder.setView(dialogView)
-        builder.setCancelable(false)
+        val builder = AlertDialog.Builder(this).apply {
+            setTitle("기간 설정")
+            setView(dialogView)
+            setCancelable(false)
+        }
 
         val calendar = Calendar.getInstance()
-        val npFromYear = dialogView.np_fromYear
-        npFromYear.maxValue = calendar.get(Calendar.YEAR)
-        npFromYear.minValue = npFromYear.maxValue - 10
-        npFromYear.value = npFromYear.maxValue
-        val npFromMonth = dialogView.np_fromMonth
-        npFromMonth.maxValue = 12
-        npFromMonth.minValue = 1
-        npFromMonth.value = calendar.get(Calendar.MONTH) + 1
-        val npToYear = dialogView.np_toYear
-        npToYear.maxValue = npFromYear.maxValue
-        npToYear.minValue = npFromYear.minValue
-        npToYear.value = npFromYear.value
-        val npToMonth = dialogView.np_toMonth
-        npToMonth.maxValue = npFromMonth.maxValue
-        npToMonth.minValue = npFromMonth.minValue
-        npToMonth.value = npFromMonth.value
+        val npFromYear = dialogView.np_fromYear.apply {
+            maxValue = calendar.get(Calendar.YEAR)
+            minValue -= 10
+            value = maxValue
+        }
+        val npFromMonth = dialogView.np_fromMonth.apply {
+            maxValue = 12
+            minValue = 1
+            value = calendar.get(Calendar.MONTH) + 1
+        }
+        val npToYear = dialogView.np_toYear.apply {
+            maxValue = npFromYear.maxValue
+            minValue = npFromYear.minValue
+            value = npFromYear.value
+        }
+        val npToMonth = dialogView.np_toMonth.apply {
+            maxValue = npFromMonth.maxValue
+            minValue = npFromMonth.minValue
+            value = npFromMonth.value
+        }
 
         builder.setPositiveButton("적용") {_, _ -> }
 
@@ -256,15 +260,13 @@ class MainActivity : AppCompatActivity() {
                         weatherList.add(c.count.toFloat())
                     }
 
-                    val intent = Intent(applicationContext, ChartActivity::class.java)
+                    startActivity(Intent(applicationContext, ChartActivity::class.java).apply {
+                        putExtra("feelList", feelList)
+                        putExtra("weatherList", weatherList)
+                        putExtra("dateText", dateText)
 
-                    intent.putExtra("feelList", feelList)
-                    intent.putExtra("weatherList", weatherList)
-                    intent.putExtra("dateText", dateText)
-
-                    intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
-
-                    startActivity(intent)
+                        flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+                    })
                 }
                 else Toast.makeText(applicationContext, "검색된 내용이 없어요.", Toast.LENGTH_SHORT).show()
             }
