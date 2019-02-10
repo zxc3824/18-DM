@@ -1,2 +1,4 @@
 configurations.maybeCreate("default")
 artifacts.add("default", file('MPAndroidChart-v3.0.1.jar'))
+dependencies {
+}
