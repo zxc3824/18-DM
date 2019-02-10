@@ -6,7 +6,6 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
-// TODO("기본 형태로 잘 돌아갈 시 이 방식으로 교체해서 테스트")
 class DBAdapter(context : Context, flags : Int) {
     companion object {
         const val DB_NAME = "list.db"

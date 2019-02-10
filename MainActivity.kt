@@ -20,8 +20,8 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
     // DB, RecyclerView 관련
     private lateinit var db : DBAdapter
-    private lateinit var reView : RecyclerView
-    private lateinit var recyclerCursorAdapter: RecyclerCursorAdapter
+    private val reView: RecyclerView by lazy { review }
+    private val recyclerCursorAdapter: RecyclerCursorAdapter by lazy { RecyclerCursorAdapter(this, c, query) }
     private val queryDefaultFront = "select * from memo "
     private val queryDefaultEnd = "order by _id desc"
     private var query : String
@@ -40,9 +40,9 @@ class MainActivity : AppCompatActivity() {
 
     // Delete 관련
     private var isDelete = false
-    private lateinit var btnLeft : Button
-    private lateinit var btnCenter : Button
-    private lateinit var btnRight : Button
+    private val btnLeft: Button by lazy { btn_chart }
+    private val btnCenter: Button by lazy { btn_delete }
+    private val btnRight: Button by lazy { btn_create }
 
     init { // 별 문제 없으면 여기서 초기화
         // Date
@@ -66,18 +66,12 @@ class MainActivity : AppCompatActivity() {
 
         tvDate = tv_btn_date
         tvDate.text = dateText
-        reView = review
 
         // RecyclerView 에 Cursor 내역 삽입 (DB -> Cursor -> Array -> Adapter -> RecyclerView)
         db = DBAdapter(this, DBAdapter.READABLE)
         c = db.rawQuery(query)
-        recyclerCursorAdapter = RecyclerCursorAdapter(this, c, query)
 
         reView.adapter = recyclerCursorAdapter
-
-        btnLeft = btn_chart
-        btnCenter = btn_delete
-        btnRight = btn_create
     }
 
     override fun onResume() {
